@@ -1,8 +1,16 @@
 from flask import Flask, render_template
+from os import listdir
+import os
+
 
 app = Flask(__name__, static_url_path='/static')
 
-# Route for main page
+@app.template_filter()
+def list_directory(dir):
+    return listdir(dir)
+
+
+# Default routing
 @app.route('/<path>')
 def index(path):
     return render_template(path + ".html")

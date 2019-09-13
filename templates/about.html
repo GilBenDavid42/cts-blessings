@@ -1,8 +1,26 @@
 {% extends "includes/page_template.html" %}
 
 {% block head %}
+    <style>
+    .image-aboutus
+    {
+        height:600px;
+        background-image: url("static/aboutus-background.jpg");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+    }
+    </style>
 {% endblock %}
 
 {% block body %}
-
+    <div class="image-aboutus">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12"  style="margin-top:70px;">
+                    <h1 class="lg-text">About Us</h1>
+                    <p class="image-aboutus-para">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
