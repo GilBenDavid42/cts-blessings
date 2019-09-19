@@ -5,9 +5,16 @@ import os
 
 app = Flask(__name__, static_url_path='/static')
 
+
 @app.template_filter()
 def list_directory(dir):
     return listdir(dir)
+
+
+# Preview page routing
+@app.route('/preview/<string:file>')
+def preview(file):
+    return render_template("preview.html", file=file)
 
 
 # Default routing

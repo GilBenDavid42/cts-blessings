@@ -1,8 +1,102 @@
 {% extends "includes/page_template.html" %}
 
 {% block head %}
+    <script src="/static/js/gif-frames.js"></script>
 {% endblock %}
 
 {% block body %}
+    <br/>
+    <div id="container"></div>
 
+    <div class="container justify-content-center">
+        <h1 class="display-3 text-center" dir="rtl">עריכת הקובץ:</h1>
+        <hr/>
+        <div class="row justify-content-center">
+            <div class="col-md-lg mr-md-5">
+                <img id="animation"/>
+            </div>
+            <div class="col-md-sm mt-3" dir="rtl">
+                <div class="form-group">
+                    <label class="float-right">שם השולח:</label>
+                    <input type="text" class="form-control" id="sender"/>
+                </div>
+                <div class="form-group">
+                    <label class="float-right">שם המקבל:</label>
+                    <input type="text" class="form-control" id="receiver"/>
+                </div>
+                <div class="form-group text-center">
+                    <a class="btn btn-primary center-block">
+                        <i class="glyphicon glyphicon-floppy-disk"></i>הבא
+                    </a>
+                    <button id="update" class="btn btn-primary center-block">
+                        <i class="glyphicon glyphicon-floppy-disk"></i>עדכן והצג
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/gif.js-master/dist/gif.js"></script>
+    <script src="/static/js/gif.js-master/dist/gif.worker.js"></script>
+
+    <script>
+
+
+        //$("#receiver").on('input', inputUpdate);
+        //$("#sender").on('input', inputUpdate);
+        $("#update").on('click', inputUpdate);
+
+        inputUpdate();
+
+        function inputUpdate() {
+
+            gifFrames({
+                url: '/static/custom-blessing-gifts/{{ file }}',
+                frames: 'all',
+                outputType: 'canvas',
+                cumulative: true
+            })
+                .then(function (frameData) {
+                    var newGif = new GIF({
+                        workers: frameData.length,
+                        workerScript: "/static/js/gif.js-master/dist/gif.worker.js",
+                        width: frameData[0].frameInfo.width,
+                        height: frameData[0].frameInfo.height
+                    });
+
+                    for (frame of frameData) {
+                        var canvas = frame.getImage();
+                        var ctx = canvas.getContext("2d");
+                        ctx.font = "30px Arial";
+                        ctx.textAlign = "center";
+                        var sender = $("#sender").val();
+                        var receiver = $("#receiver").val();
+                        ctx.fillText(sender, canvas.width / 2, 40);
+                        ctx.fillText(receiver, canvas.width / 2, canvas.height - 10);
+                        newGif.addFrame(canvas, {delay: frame.delay});
+                    }
+
+                    newGif.on('finished', function (blob) {
+                        $("#animation").attr("src", URL.createObjectURL(blob));
+                    });
+                    newGif.render();
+                }).catch(console.error.bind(console));
+        }
+
+    </script>
+
+
+
+    <script>
+        /*var animation = $("#animation");
+         var animationCanvas = $("#animationCanvas");
+         var isGif = animation.attr("src").split(".")[1] == "gif";
+         if(isGif)
+         {
+         }
+         else
+         {
+
+         }*/
+    </script>
 {% endblock %}

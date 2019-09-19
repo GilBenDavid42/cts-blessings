@@ -1,6 +1,9 @@
-{% extends "includes/page_template.html" %}
+{% extends "/includes/page_template.html" %}
 
 {% block head %}
+    <link href="/static/js/lightbox-master/dist/ekko-lightbox.css" rel="stylesheet"/>
+    <link href="/static/js/Simple-jQuery-Magnifying-Glass-Image-Zoom-Plugin-magnify-js/dist/css/magnify.css"
+          rel="stylesheet"/>
 {% endblock %}
 
 {% block body %}
@@ -8,23 +11,27 @@
         <div class="container">
             <div class="row">
                 {% for file_name in "static/custom-blessing-gifts" | list_directory %}
+                    {% set title = file_name.split(".")[0] %}
                     <div class="col-md-4">
                         <div class="card mb-4 box-shadow">
-                            <img class="card-img-top"
-                                    {% set title = file_name.split('.')[0] %}
-                                 data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text={{ title }}"
-                                 alt="Thumbnail [100%x225]" style="height: 225px; width: 100%; display: block;"
-                                 src="{{ "static/custom-blessing-gifts/" + file_name }}"
-                                 data-holder-rendered="true">
+                            <img src="/static/custom-blessing-gifts/{{ file_name }}"
+                                 data-magnify-src="/static/custom-blessing-gifts/{{ file_name }}"
+                                 class="card-img-top img-fluid"
+                                 alt="{{ title }}"
+                                 style="height: 225px; width: 100%; display: block;">
                             <div class="card-body">
                                 <p class="card-text">This is a wider card with supporting text below as a natural
                                     lead-in to additional content. This content is a little bit longer.</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                        <a href="/static/custom-blessing-gifts/{{ file_name }}" data-toggle="lightbox"
+                                           data-title="{{ title }}" data-footer="xxx"
+                                           class="btn btn-sm btn-outline-secondary">
+                                            View
+                                        </a>
+                                        <a class="btn btn-sm btn-outline-secondary" href="preview/{{ file_name }}">Edit</a>
                                     </div>
-                                    <small class="text-muted">9 mins</small>
+                                    <small class="text-muted">{{ title }}</small>
                                 </div>
                             </div>
                         </div>
@@ -33,4 +40,16 @@
             </div>
         </div>
     </div>
+    <script src="/static/js/Simple-jQuery-Magnifying-Glass-Image-Zoom-Plugin-magnify-js/dist/js/jquery.magnify.js"></script>
+    <script src="/static/js/lightbox-master/dist/ekko-lightbox.js"></script>
+    <script>
+        $(document).on('click', '[data-toggle="lightbox"]', function (event) {
+            event.preventDefault();
+            $(this).ekkoLightbox();
+        });
+
+        $(document).ready(function () {
+            $('img').magnify();
+        });
+    </script>
 {% endblock %}
