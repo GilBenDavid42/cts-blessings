@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from os import listdir
 import os
 
@@ -11,10 +11,18 @@ def list_directory(dir):
     return listdir(dir)
 
 
-# Preview page routing
+# Preview page gets the custom blessing gift file
 @app.route('/preview/<string:file>')
 def preview(file):
     return render_template("preview.html", file=file)
+
+
+# Result page gets the edited file blob id
+@app.route('/result', methods=['POST'])
+def result():
+    print("x")
+    print(request.form)
+    return render_template("result.html", editedAnimationUrl=request.form["animationUrl"])
 
 
 # Default routing

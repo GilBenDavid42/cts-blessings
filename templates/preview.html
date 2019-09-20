@@ -8,47 +8,67 @@
     <br/>
     <div id="container"></div>
 
-    <div class="container justify-content-center">
-        <h1 class="display-3 text-center" dir="rtl">עריכת הקובץ:</h1>
-        <hr/>
-        <div class="row justify-content-center">
-            <div class="col-md-lg mr-md-5">
-                <img id="animation"/>
-            </div>
-            <div class="col-md-sm mt-3" dir="rtl">
-                <div class="form-group">
-                    <label class="float-right">שם השולח:</label>
-                    <input type="text" class="form-control" id="sender"/>
+    <form method="post" action="/result">
+        <input type="hidden" value="asdf"/>
+        <div class="container justify-content-center">
+            <h1 class="display-3 text-center" dir="rtl">עריכת הקובץ:</h1>
+            <hr/>
+            <div class="row justify-content-center">
+                <div class="mr-md-5">
+                    <img id="animation" width="500" height="360"
+                         src="/static/custom-blessing-gifts/{{ file }}"/>
+                    <input id="animationUrl" name="animationUrl" type="hidden"
+                           value="/static/custom-blessing-gifts/{{ file }}"/>
                 </div>
-                <div class="form-group">
-                    <label class="float-right">שם המקבל:</label>
-                    <input type="text" class="form-control" id="receiver"/>
-                </div>
-                <div class="form-group text-center">
-                    <a class="btn btn-primary center-block">
-                        <i class="glyphicon glyphicon-floppy-disk"></i>הבא
-                    </a>
-                    <button id="update" class="btn btn-primary center-block">
-                        <i class="glyphicon glyphicon-floppy-disk"></i>עדכן והצג
-                    </button>
+                <div class="col-md-sm mt-3" dir="rtl">
+                    <div class="form-group">
+                        <label class="float-right">שם השולח:</label>
+                        <input type="text" class="form-control" id="sender" maxlength="20"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="float-right">שם המקבל:</label>
+                        <input type="text" class="form-control" id="receiver" maxlength="20" required/>
+                    </div>
+                    <div class="form-group text-center">
+                        <button id="next" class="btn btn-primary center-block">
+                            <i class="glyphicon text-white glyphicon-floppy-disk"></i>הבא
+                        </button>
+                        <button type="button" id="update" class="btn btn-primary center-block">
+                            <i class="glyphicon glyphicon-floppy-disk"></i>עדכן והצג
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+
+    </form>
 
     <script src="/static/js/gif.js-master/dist/gif.js"></script>
     <script src="/static/js/gif.js-master/dist/gif.worker.js"></script>
 
     <script>
-
-
         //$("#receiver").on('input', inputUpdate);
         //$("#sender").on('input', inputUpdate);
-        $("#update").on('click', inputUpdate);
+        $("#update").on('click', function () {
+            var isGif = "{{ file }}".split(".")[1] == "gif";
+            if (isGif) {
+                gifUpdate();
+            } else {
+                var canvas = $("<canvas></canvas>")[0];
+                var ctx = canvas.getContext("2d");
+                var img = $("#animation")[0];
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0, img.width, img.height);
+                canvas = addTextToCanvas(canvas);
+                var imageWithTextUrl = canvas.toDataURL();
+                $("#animation").attr("src", imageWithTextUrl);
+                $("#animationUrl").val(imageWithTextUrl);
+            }
 
-        inputUpdate();
+        });
 
-        function inputUpdate() {
+        function gifUpdate() {
 
             gifFrames({
                 url: '/static/custom-blessing-gifts/{{ file }}',
@@ -65,38 +85,35 @@
                     });
 
                     for (frame of frameData) {
-                        var canvas = frame.getImage();
-                        var ctx = canvas.getContext("2d");
-                        ctx.font = "30px Arial";
-                        ctx.textAlign = "center";
-                        var sender = $("#sender").val();
-                        var receiver = $("#receiver").val();
-                        ctx.fillText(sender, canvas.width / 2, 40);
-                        ctx.fillText(receiver, canvas.width / 2, canvas.height - 10);
-                        newGif.addFrame(canvas, {delay: frame.delay});
+                        var canvasWithText = addTextToCanvas(frame.getImage());
+                        newGif.addFrame(canvasWithText, {delay: frame.delay});
                     }
 
                     newGif.on('finished', function (blob) {
-                        $("#animation").attr("src", URL.createObjectURL(blob));
+                        var blobUrl = URL.createObjectURL(blob);
+                        var blobId = blobUrl.split("/")[3];
+                        $("#animation").attr("src", blobUrl);
+                        $("#animationUrl").val(blobUrl);
                     });
                     newGif.render();
                 }).catch(console.error.bind(console));
         }
 
+        function addTextToCanvas(canvas) {
+            var ctx = canvas.getContext("2d");
+            ctx.font = "30px Arial";
+            ctx.textAlign = "center";
+            var sender = $("#sender").val();
+            var receiver = $("#receiver").val();
+            ctx.fillText(sender, canvas.width / 2, 40);
+            ctx.fillText(receiver, canvas.width / 2, canvas.height - 10);
+            return canvas;
+        }
     </script>
 
 
 
     <script>
-        /*var animation = $("#animation");
-         var animationCanvas = $("#animationCanvas");
-         var isGif = animation.attr("src").split(".")[1] == "gif";
-         if(isGif)
-         {
-         }
-         else
-         {
 
-         }*/
     </script>
 {% endblock %}

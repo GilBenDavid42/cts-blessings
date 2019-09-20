@@ -4,6 +4,17 @@
 {% endblock %}
 
 {% block body %}
+    <img id="animation" src="{{ editedAnimationUrl }}"/>
+    <!--Facebook-->
+    <a class="btn-floating btn-lg btn-fb" type="button" role="button"><i class="fab fa-facebook-f"></i></a>
+    <!--Instagram-->
+    <a class="btn-floating btn-lg btn-ins" type="button" role="button"><i class="fab fa-instagram"></i></a>
+    <!--Email-->
+    <a class="btn-floating btn-lg btn-email" type="button" role="button"><i class="fas fa-envelope"></i></a>
+    <!--Linkedin-->
+    <a class="btn-floating btn-lg btn-li" type="button" role="button"><i class="fab fa-linkedin-in"></i></a>
+    <i class="fa fa-whatsapp" aria-hidden="true"></i>
+
     <script>
         window.fbAsyncInit = function () {
             FB.init({
@@ -20,7 +31,7 @@
                 'POST',
                 {
                     message: 'This is a GIF',
-                    link: 'https://25.media.tumblr.com/08d54accc4beb56a50e752fd931c6b58/tumblr_mlsyqrzwWQ1s3g3ago1_400.gif'
+                    link: "{{ editedAnimationUrl }}"
                 },
                 function (response) {
                     console.log(response);
