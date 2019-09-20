@@ -1,19 +1,24 @@
 {% extends "/includes/page_template.html" %}
 
 {% block head %}
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-social-gh-pages/bootstrap-social.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/fontawesome-free-5.11.1-web/css/all.min.css">
+    <script src="/static/css/fontawesome-free-5.11.1-web/js/all.min.js"></script>
 {% endblock %}
 
 {% block body %}
     <img id="animation" src="{{ editedAnimationUrl }}"/>
+
+    <!--Whatsapp-->
+    <button type="button" class="btn btn-success"><i class="fab fa-whatsapp"></i></button>
     <!--Facebook-->
-    <a class="btn-floating btn-lg btn-fb" type="button" role="button"><i class="fab fa-facebook-f"></i></a>
-    <!--Instagram-->
-    <a class="btn-floating btn-lg btn-ins" type="button" role="button"><i class="fab fa-instagram"></i></a>
-    <!--Email-->
-    <a class="btn-floating btn-lg btn-email" type="button" role="button"><i class="fas fa-envelope"></i></a>
+    <button type="button" class="btn btn-facebook"><i class="fab fa-facebook-f"></i></button>
     <!--Linkedin-->
-    <a class="btn-floating btn-lg btn-li" type="button" role="button"><i class="fab fa-linkedin-in"></i></a>
-    <i class="fa fa-whatsapp" aria-hidden="true"></i>
+    <button type="button" class="btn btn-linkedin"><i class="fab fa-linkedin-in"></i></button>
+    <!--Instagram-->
+    <button type="button" class="btn btn-instagram"><i class="fab fa-instagram"></i></button>
+
+
 
     <script>
         window.fbAsyncInit = function () {

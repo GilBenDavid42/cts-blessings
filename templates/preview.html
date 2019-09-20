@@ -2,6 +2,7 @@
 
 {% block head %}
     <script src="/static/js/gif-frames.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Heebo' rel='stylesheet'>
 {% endblock %}
 
 {% block body %}
@@ -54,18 +55,23 @@
             if (isGif) {
                 gifUpdate();
             } else {
-                var canvas = $("<canvas></canvas>")[0];
-                var ctx = canvas.getContext("2d");
-                var img = $("#animation")[0];
-                canvas.width = img.width;
-                canvas.height = img.height;
-                ctx.drawImage(img, 0, 0, img.width, img.height);
-                canvas = addTextToCanvas(canvas);
-                var imageWithTextUrl = canvas.toDataURL();
-                $("#animation").attr("src", imageWithTextUrl);
-                $("#animationUrl").val(imageWithTextUrl);
+                var img = new Image();
+                img.crossOrigin = "anonymous";
+                img.width = 500;
+                img.height = 360;
+                img.onload = function () {
+                    var imgCanvas = $("<canvas></canvas>")[0];
+                    var ctx = imgCanvas.getContext("2d");
+                    imgCanvas.width = img.width;
+                    imgCanvas.height = img.height;
+                    ctx.drawImage(img, 0, 0, img.width, img.height);
+                    imgCanvas = addTextToCanvas(imgCanvas);
+                    var imageWithTextUrl = imgCanvas.toDataURL();
+                    $("#animation").attr("src", imageWithTextUrl);
+                    $("#animationUrl").val(imageWithTextUrl);
+                };
+                img.src = "/static/custom-blessing-gifts/{{ file }}";
             }
-
         });
 
         function gifUpdate() {
@@ -101,12 +107,16 @@
 
         function addTextToCanvas(canvas) {
             var ctx = canvas.getContext("2d");
-            ctx.font = "30px Arial";
-            ctx.textAlign = "center";
             var sender = $("#sender").val();
             var receiver = $("#receiver").val();
-            ctx.fillText(sender, canvas.width / 2, 40);
-            ctx.fillText(receiver, canvas.width / 2, canvas.height - 10);
+            ctx.font = "40px Heebo";
+            ctx.textAlign = "right";
+            ctx.direction = "rtl";
+            ctx.fillText(receiver, canvas.width / 1.08, 80);
+            ctx.font = "30px Heebo";
+            ctx.textAlign = "right";
+            ctx.direction = "rtl";
+            ctx.fillText(sender, canvas.width / 1.2, canvas.height - 65);
             return canvas;
         }
     </script>
