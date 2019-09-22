@@ -96,10 +96,10 @@ var Lightbox = (function ($) {
 
 			this._isBootstrap3 = $.fn.modal.Constructor.VERSION[0] == 3;
 
-			var h4 = '<h4 class="modal-title">' + (this._config.title || "&nbsp;") + '</h4>';
+			var h4 = '<h4 class="modal-title w-100">' + (this._config.title || "&nbsp;") + '</h4>';
 			var btn = '<button type="button" class="close" data-dismiss="modal" aria-label="' + this._config.strings.close + '"><span aria-hidden="true">&times;</span></button>';
 
-			var header = '<div class="modal-header' + (this._config.title || this._config.alwaysShowClose ? '' : ' hide') + '">' + (this._isBootstrap3 ? btn + h4 : h4 + btn) + '</div>';
+			var header = '<div class="modal-header text-center' + (this._config.title || this._config.alwaysShowClose ? '' : ' hide') + '">' + (this._isBootstrap3 ? btn + h4 : h4 + btn) + '</div>';
 			var footer = '<div class="modal-footer' + (this._config.footer ? '' : ' hide') + '">' + (this._config.footer || "&nbsp;") + '</div>';
 			var body = '<div class="modal-body"><div class="ekko-lightbox-container"><div class="ekko-lightbox-item fade in show"></div><div class="ekko-lightbox-item fade"></div></div></div>';
 			var dialog = '<div class="modal-dialog" role="document"><div class="modal-content">' + header + body + footer + '</div></div>';

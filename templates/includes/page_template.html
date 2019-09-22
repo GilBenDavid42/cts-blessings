@@ -3,32 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>ברכות לראש השנה</title>
-    <script src="/static/js/jquery-3.4.1.min.js"></script>
     <link rel="shortcut icon" href="/static/images/favicon.ico"/>
-    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css"/>
+    <script src="/static/js/jquery-3.4.1.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/js/MDB-Free_4.8.10/css/mdb.min.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=0.71">
 
     {% block head %}
     {% endblock %}
 </head>
-<body>
+<body bgcolor="#FFCAD9" style="background-color: #fffcad">
 <nav class="navbar navbar-expand navbar-dark bg-primary">
-    <div class="collapse navbar-collapse font-weight-bold" id="navbarSupportedContent">
+    <div class="collapse navbar-collapse font-weight-bold text-center" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
                 <a class="nav-link" href="/home">דף הבית</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/about">אודות</a>
-            </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <button class="btn btn-outline-light my-2 my-sm-0 mr-sm-2" type="submit">חיפוש</button>
-            <input class="form-control" type="search" placeholder="חיפוש ברכות" aria-label="Search">
-        </form>
+        <img src="/static/images/icon.png" class="img-fluid" style="width: 20%; height: 20%;"/>
     </div>
 </nav>
+<script>
+</script>
 {% block body %}
 {% endblock %}
 </body>
