@@ -55,7 +55,7 @@
                         <input type="text" class="form-control" id="receiver" maxlength="20" required/>
                     </div>
                     <div class="form-group text-center">
-                        <button id="next" class="btn btn-primary center-block" onclick="update()">
+                        <button id="next" class="btn btn-primary center-block">
                             <i class="glyphicon text-white glyphicon-floppy-disk"></i>הבא
                         </button>
                         <button type="button" id="update" class="btn btn-primary center-block">
@@ -72,7 +72,12 @@
     <script src="/static/js/gif.js-master/dist/gif.worker.js"></script>
 
     <script>
+
+        var animations = $("[name='animation']");
+        var animationsData = $("[name='animationData']");
         var isGif = "{{ file }}".split(".")[1] == "gif";
+        var firstUrl = animations[0].src;
+        var lastUrl = animations[animations.length-1].src;
 
         //$("#receiver").on('input', inputUpdate);
         //$("#sender").on('input', inputUpdate);
@@ -82,45 +87,43 @@
             if (isGif) {
                 gifUpdate();
             } else {
-                var animations = $("[name='animation']");
-                var animationsData = $("[name='animationData']");
                 if ($("#receiver").val() != "") {
-                    var img = new Image();
-                    img.crossOrigin = "anonymous";
-                    img.width = 500;
-                    img.height = 500;
-                    img.onload = function () {
-                        var imgCanvas = $("<canvas></canvas>")[0];
-                        var ctx = imgCanvas.getContext("2d");
-                        imgCanvas.width = img.width;
-                        imgCanvas.height = img.height;
-                        ctx.drawImage(img, 0, 0, img.width, img.height);
+                    var firstImg = new Image();
+                    firstImg.crossOrigin = "anonymous";
+                    firstImg.width = 1000;
+                    firstImg.height = 1000;
+                    firstImg.onload = function () {
+                        var firstImgCanvas = $("<canvas></canvas>")[0];
+                        var ctx = firstImgCanvas.getContext("2d");
+                        firstImgCanvas.width = firstImg.width;
+                        firstImgCanvas.height = firstImg.height;
+                        ctx.drawImage(firstImg, 0, 0, firstImg.width, firstImg.height);
                         if (animations.length == 1) {
-                            imgCanvas = addTextToCanvas(imgCanvas);
+                            firstImgCanvas = addTextToCanvas(firstImgCanvas);
                         } else {
-                            imgCanvas = addReceiverNameToCanvas(imgCanvas);
+                            firstImgCanvas = addReceiverNameToCanvas(firstImgCanvas);
                         }
-                        var imageWithTextBase64 = imgCanvas.toDataURL();
+                        var imageWithTextBase64 = firstImgCanvas.toDataURL();
                         animations.eq(0).attr("src", imageWithTextBase64);
                     };
-                    img.src = animations[0].src;
+                    firstImg.src = firstUrl;
                 }
                 if ($("#sender").val() != "" && animations.length > 1) {
-                    var img = new Image();
-                    img.crossOrigin = "anonymous";
-                    img.width = 500;
-                    img.height = 500;
-                    img.onload = function () {
-                        var imgCanvas = $("<canvas></canvas>")[0];
-                        var ctx = imgCanvas.getContext("2d");
-                        imgCanvas.width = img.width;
-                        imgCanvas.height = img.height;
-                        ctx.drawImage(img, 0, 0, img.width, img.height);
-                        imgCanvas = addSenderNameToCanvas(imgCanvas);
-                        var imageWithTextBase64 = imgCanvas.toDataURL();
-                        animations.eq(animations.length-1).attr("src", imageWithTextBase64);
+                    var secondImg = new Image();
+                    secondImg.crossOrigin = "anonymous";
+                    secondImg.width = 1000;
+                    secondImg.height = 1000;
+                    secondImg.onload = function () {
+                        var secondImgCanvas = $("<canvas></canvas>")[0];
+                        var ctx = secondImgCanvas.getContext("2d");
+                        secondImgCanvas.width = secondImg.width;
+                        secondImgCanvas.height = secondImg.height;
+                        ctx.drawImage(secondImg, 0, 0, secondImg.width, secondImg.height);
+                        secondImgCanvas= addSenderNameToCanvas(secondImgCanvas);
+                        var imageWithTextBase64 = secondImgCanvas.toDataURL();
+                        animations.eq(animations.length - 1).attr("src", imageWithTextBase64);
                     };
-                    img.src = animations[animations.length-1].src;
+                    secondImg.src = lastUrl;
                 }
             }
         }
@@ -164,7 +167,7 @@
         function addReceiverNameToCanvas(canvas) {
             var ctx = canvas.getContext("2d");
             var receiver = $("#receiver").val();
-            ctx.font = "40px Heebo";
+            ctx.font = "60px Heebo";
             ctx.textAlign = "right";
             ctx.direction = "rtl";
             ctx.fillText(receiver, canvas.width / 1.08, 80);
@@ -174,14 +177,15 @@
         function addSenderNameToCanvas(canvas) {
             var ctx = canvas.getContext("2d");
             var sender = $("#sender").val();
-            ctx.font = "30px Heebo";
+            ctx.font = "45px Heebo";
             ctx.textAlign = "right";
             ctx.direction = "rtl";
-            ctx.fillText(sender, canvas.width / 1.2, canvas.height - 65);
+            ctx.fillText(sender, canvas.width / 1.5, canvas.height / 1.3);
             return canvas;
         }
 
         $("#form").submit(function () {
+            update();
             if (isGif) {
                 var blob = "";
                 var xhr = new XMLHttpRequest();
@@ -196,14 +200,11 @@
                 };
                 xhr.send();
             } else {
-                $("#animationData").val($("#animation").attr("src"));
+                animationsData.each(function(i)
+                {
+                    $(this).val(animations[i].src);
+                });
             }
         });
-    </script>
-
-
-
-    <script>
-
     </script>
 {% endblock %}

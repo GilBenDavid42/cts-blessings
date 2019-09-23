@@ -1,10 +1,7 @@
 from flask import Flask, render_template, request
 from os import listdir, remove, mkdir
 import uuid
-import shutil
 import base64
-from threading import Thread
-from time import sleep
 
 app = Flask(__name__, static_url_path='/static')
 
@@ -20,30 +17,27 @@ def preview(files_str):
     return render_template("preview.html", files=files_str.split('|')[:-1])
 
 
-def rm_temp_file(file_name):
-    sleep(60 * 10)  # Ten minutes before removing file
-    remove("static/custom-blessing-gifts/temp-files/" + file_name)
-
-
 # Result page gets the edited file blob id
 @app.route('/result', methods=['POST'])
 def result():
-    print(request.form)
-    animationData = request.form["animationData"];
+    animations_data = request.form.getlist('animationData')
+    files_name = []
+    for animation_data in animations_data:
+        file_name = animation_data
+        file_ext = ""
+        if file_name.startswith("data:"):
+            file_ext = ".png"
+            animation_data = base64.decodestring(animation_data.split(",")[1].encode())
+        elif file_name.startswith('blob:'):
+            file_ext += ".gif"
 
-    file_name = str(uuid.uuid1())
-    if animationData.startswith("data:"):
-        file_name += ".png"
-        print(animationData)
-        animationData = base64.decodestring(animationData.split(",")[1].encode())
-    else:
-        file_name += ".gif"
+        if file_ext:
+            file_name = "static/temp-files/" + str(uuid.uuid1()) + file_ext
+            with open(file_name, "wb") as file:
+                file.write(animation_data)
+        files_name.append(file_name)
 
-    with open("static/temp-files/" + file_name, "wb") as file:
-        file.write(animationData)
-
-    rm_temp_file_thread = Thread(target=rm_temp_file, args=(file_name,))
-    return render_template("result.html", editedAnimationUrl=file_name)
+    return render_template("result.html", editedAnimationUrls=files_name)
 
 
 # Default routing
