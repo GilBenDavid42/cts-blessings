@@ -1,0 +1,133 @@
+{% extends "/includes/page_template.html" %}
+
+{% block head %}
+    <link href="/static/js/lightbox-master/dist/ekko-lightbox.css" rel="stylesheet"/>
+
+    <style>
+        .btn-circle.btn-sm {
+            width: 30px;
+            height: 30px;
+            padding: 6px 0px;
+            border-radius: 15px;
+            font-size: 8px;
+            text-align: center;
+        }
+
+        .btn-circle.btn-md {
+            width: 50px;
+            height: 50px;
+            padding: 7px 10px;
+            border-radius: 25px;
+            font-size: 10px;
+            text-align: center;
+        }
+
+        .btn-circle.btn-xl {
+            width: 70px;
+            height: 70px;
+            padding: 10px 16px;
+            border-radius: 35px;
+            font-size: 12px;
+            text-align: center;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
+        <a id="previewLink" href="/preview/" onclick="return showPreview()">
+            <button type="button" class="btn btn-primary btn-circle btn-xl"
+                    style="font-size: 50px; text-align: center; line-height: 50px;">&#8250;
+            </button>
+        </a>
+    </div>
+    <div class="album py-5">
+        <div class="container">
+            <div class="row">
+                {% for file_name in "static/custom-blessing-gifts" | list_directory %}
+                    {% if loop.index % 2 == 1 %}
+                        {% set title = file_name.split(".")[0] %}
+                        <div class="row">
+                            <div class="col">
+                                <div class="card mb-4 box-shadow">
+                                    <img src="/static/custom-blessing-gifts/{{ file_name }}"
+                                         data-magnify-src="/static/custom-blessing-gifts/{{ file_name }}"
+                                         class="card-img-top img-fluid"
+                                         alt="{{ title }}"/>
+
+                                    <div class="card-body">
+                                        <p></p>
+                                        <div class="d-flex justify-content-center align-items-center btn-group-toggle"
+                                             dir="rtl" data-toggle="buttons">
+
+                                            <a href="/static/custom-blessing-gifts/{{ file_name }}"
+                                               data-toggle="lightbox"
+                                               data-title="{{ title }}"
+                                               class="btn btn-sm btn-outline-secondary ml-1">
+                                                הצג
+                                            </a>
+
+                                            <label class="btn btn-sm btn-success">
+                                                <input type="radio" onchange="addFile(this, '{{ file_name }}');">בחר!
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if loop.nextitem %}
+                                {% set title = loop.nextitem.split(".")[0] %}
+                                <div class="col">
+                                    <div class="card mb-4 box-shadow">
+                                        <img src="/static/custom-blessing-gifts/{{ loop.nextitem }}"
+                                             data-magnify-src="/static/custom-blessing-gifts/{{ loop.nextitem }}"
+                                             class="card-img-top img-fluid"
+                                             alt="{{ title }}"/>
+
+                                        <div class="card-body">
+                                            <p></p>
+                                            <div class="d-flex justify-content-center align-items-center btn-group-toggle"
+                                                 dir="rtl" data-toggle="buttons">
+
+                                                <a href="/static/custom-blessing-gifts/{{ loop.nextitem }}"
+                                                   data-toggle="lightbox"
+                                                   data-title="{{ title }}"
+                                                   class="btn btn-sm btn-outline-secondary ml-1">
+                                                    הצג
+                                                </a>
+
+                                                <label class="btn btn-sm btn-success"
+                                                       onchange="addFile(this, '{{ loop.nextitem }}');">
+                                                    <input type="checkbox">בחר!
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <script src="/static/js/lightbox-master/dist/ekko-lightbox.js"></script>
+    <script>
+        function addFile(t, file) {
+            if (!$(t).hasClass('active')) {
+                $("#previewLink").attr("href", $("#previewLink").attr("href") + file + "|");
+            } else {
+                $("#previewLink").attr("href", $("#previewLink").attr("href").replace(file + "|", ""));
+            }
+        }
+
+        function showPreview() {
+            return $(this).attr("href").includes("|");
+        }
+
+        $(document).on('click', '[data-toggle="lightbox"]', function (event) {
+            event.preventDefault();
+            $(this).ekkoLightbox();
+        });
+    </script>
+{% endblock %}

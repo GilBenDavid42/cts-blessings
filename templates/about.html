@@ -1,0 +1,29 @@
+{% extends "/includes/page_template.html" %}
+
+{% block head %}
+    <style>
+    .image-aboutus
+    {
+        height:600px;
+        background-image: url("/static/images/aboutus-background.jpg");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+    }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="image-aboutus">
+        <div class="container">
+            <div class="row">
+                <div dir="rtl" class="col-md-12 text-right"  style="margin-top:70px;">
+                    <h1 class="lg-text">אודותינו</h1>
+                    <p class="image-aboutus-para">אתר זה הוא אתר משחק לראש השנה.
+                    תוכל לבחור ברכה מתוך מגוון ברכות gif מובנות הקיימות אצלנו באתר
+                    ולהוסיף לה את שמך ואת שם מקבל הברכה.
+                    לאחר מכן תוכל לשתף אותן במגוון פלטפורמות כגון פייסבוק, וואצאפ, אינסטגרם ולינקדאין.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
